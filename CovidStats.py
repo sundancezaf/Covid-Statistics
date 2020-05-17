@@ -581,7 +581,9 @@ def writeToFile(event):
         splitValue = line.split(",")
         date = splitValue[0]
         stateFinal = splitValue[1]
-        stateFinal = stateFinal.strip("\n")
+        population = splitValue[2]
+        twoWeeksAfter = splitValue[3]
+        twoWeeksAfter = twoWeeksAfter.strip("\n")
 
         statsFor = "Statistics for " + str(stateFinal)
         # Get the last compiled date
@@ -593,6 +595,8 @@ def writeToFile(event):
         # if this returns True, the state hasn't opened for businesses yet
         notInRange = dateComparison(date,endDate)
 
+        # change 2Weeks after date
+        twoWeeksAfter = recognizeDate(twoWeeksAfter)
         if notInRange:
             # Opening Date
             openingStateDate = "The state will open business as usual on: " + str(beginningDate)
@@ -613,32 +617,48 @@ def writeToFile(event):
             caseFile.write("\n")
             caseFile.write("\n")
         else:
+            # population
+            populationStat = "Population: " + str(population)
+
             # Opening date
             openingStateDate = "The date this state started opening business as usual: " + str(beginningDate)
+
+            # Date that is 2 weeks after opening date
+            twoWeeksStat = "Two weeks after opening date: " + str(twoWeeksAfter)
+
             # Date of first event
             firstEvent = "The first of " + str(event) + " occurred: " + str(
                 getFirstEvent("us-states.csv", stateFinal, event))
             # How many cases in between since opening date and last compiled date
-            casesInBetween = "The new cases between " + str(beginningDate) + " and " + str(endDate) + " are: " + str(
+            casesInBetween = "The new cases between opening date: " + str(beginningDate) + " and compiled date: " + str(endDate) + " are: " + str(
                 casesBetweenDates("us-states.csv", stateFinal, startDate, event))
             # Number of total cases
             totalCases ="Total " + str(event) + ": " + str(totalEventsRecorded("us-states.csv",stateFinal,event))
-
+            # Cases per capita
+            casesPerCapita = "The " + str(event) + " per capita: " + str(eventsPerCapita("us-states.csv",stateFinal,population,event))
             # Write stats to file
             caseFile.write(statsFor)
+            caseFile.write("\n")
+            caseFile.write(populationStat)
             caseFile.write("\n")
             caseFile.write(firstEvent)
             caseFile.write("\n")
             caseFile.write(openingStateDate)
             caseFile.write("\n")
+            caseFile.write(twoWeeksStat)
+            caseFile.write("\n")
             caseFile.write(casesInBetween)
             caseFile.write("\n")
             caseFile.write(totalCases)
             caseFile.write("\n")
+            caseFile.write(casesPerCapita)
             caseFile.write("\n")
+            caseFile.write("\n")
+
 
 
     return endDate
     f.close()
+
 
 writeToFile("cases")
