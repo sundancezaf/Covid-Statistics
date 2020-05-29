@@ -19,7 +19,7 @@ to use are: split(), strip(), date(), open(), close(), max(), min().
 '''
 
 
-from datetime import date
+from datetime import date, timedelta
 
 # Changes dates format from MM/DD/YY or MM/DD/YYYY to YYYY-MM-DD Python format.
 def paranthesisDate(dateString):
@@ -62,7 +62,7 @@ def hyphensDate(aDate):
 
 
 
-# Recognize if date is in MM/DD/YY or YYYY-MM-DD and format accordingly #
+# Recognize if date is in MM/DD/YY or YYYY-MM-DD and format accordingly
 def recognizeDate(mDate):
     hyphens = []
     parantheses = []
@@ -90,15 +90,27 @@ def lastDateinCSV():
         cases = splitValue[3]
         deaths = splitValue[4]
         deaths = deaths.strip("\n")
-
+    f.close()
     return date
+
+
+# Previous date from last date in CSV file
+
+def previousDate():
+    lastDate = recognizeDate(lastDateinCSV())
+    dateBefore = lastDate - timedelta(days=1)
+    return dateBefore
+
+print(previousDate())
+
+
 
 
 #####################                 isInRange               #########################
 #write a function that takes, as an argument, three strings representing dates
 #a start date, an end date, and a query date, all three of which are in the format
 #MM/DD/YY and returns a Boolean True if the query date is BETWEEN the start and end dates,
-#and False if not.  Name this function isInRange(startDate, endDate, queryDate).  (5 points)
+#and False if not.
 
 def isInRange(startDate, endDate, queryDate):
     # split the values by "/" this returns a string which will be converted to ints
@@ -132,12 +144,10 @@ def isInRange(startDate, endDate, queryDate):
     return inBetween
 
 ######################             getFirstEvent             ########################
-#write a function that takes, as arguments, a file name, a state, and an event
-#which is either 'cases' or 'deaths'.  If the event is 'cases', the function should
-#return the STRING in the file that represents the date of the first case, 
-#and if the event is 'deaths', the function should return the STRING in the file
-#that represents the date of the first death.  If no event has occurred, return the STRING
-#'None'.  We will name this function getFirstEvent(fileName, state, event).  (10 points)
+# write a function that takes, as arguments, a file name, a state, and an event which is either 'cases' or 'deaths'.
+# If the event is 'cases', return the STRING date of the first case, and if the event is 'deaths', return the STRING
+# date of the first death.  If no event has occurred, return the STRING 'None'.
+# Function name: getFirstEvent(fileName, state, event).
 
 def getFirstEvent(fileName,state,event):
     f = open(fileName,"r")
@@ -174,13 +184,11 @@ def getFirstEvent(fileName,state,event):
 
 
 ####################                 caseToDeath                     ####################
-#write a function that takes, as arguments, a file name and a state, and returns the number of days between the
-#first case for the state and the first death reported.  If either no case or no death has been reported
-#the function should return the string 'None'.  Name this function caseToDeath(filename, state).  
-#You must use the helper functions getDateFromString(dateString) and getFirstEvent(fileName, state, event) 
-#as part of this function. Even if you are unable to write those helper functions, assume that they work
-#as intended and make use of them here.  you must NOT re-write the contents of those helper functions
-#as part of this function.  (10 points)
+# write a function that takes, as arguments, a file name and a state, and returns the number of days between the
+# first case for the state and the first death reported.  If either no case or no death has been reported return the
+# string 'None'.  Name this function caseToDeath(filename, state).
+# Use helper functions getDateFromString(dateString) and getFirstEvent(fileName, state, event)
+# as part of this function.
 
 def caseToDeath(fileName, state):
     # Need to get the dates for first case and first death reported
@@ -220,18 +228,10 @@ def caseToDeath(fileName, state):
 
 
 ####################                maxDaysCaseDeath               #############
-#write a function that takes, as arguments, the name of the file containing case/death
-#data and the name of a file containing population data, and returns the state whose
-#time between the first case and the first death is a MAXIMUM value. Hint: use the
-#population.csv file to get the name of each state...as you read through that file,
-#get the name of each state and use the caseToDeath(fileName, state) helper function to get the number of days
-#between the first case and the first death for that state.  keep track of this date
-#as well as the corresponding state as you determine the largest of these dates
-#your function should return a string containing the name of the state and the number of
-#days between the first case and the first death.  For example, if the state were Washington
-#and the number of days was 55, your function should return the string 'Washington: 55 days'
-#make sure the grammar is correct: if it is 1 day, make sure day is singular.
-#name this function maxDaysCaseDeath(caseFile, populationFile).  (10 points)
+# Write a function that takes, as arguments, the name of the file containing case/death data and the name of a file
+# containing population data, and returns the state whose time between the first case and
+# the first death is a MAXIMUM value. For example, if the state were Washington and the number of days was 55,
+# your function should return the string 'Washington: 55 days'.
 
 def maxDaysCaseDeath(caseFile, populationFile):
     f = open(populationFile,"r")
@@ -267,7 +267,7 @@ def maxDaysCaseDeath(caseFile, populationFile):
 #days between the first case and the first death.  For example, if the state were Washington
 #and the number of days was 12, your function should return the string 'Washington: 12 days'
 #make sure your string is grammatically correct.  if it is 1 day, it should be singular.
-#name this function minDaysCaseDeath(caseFile, populationFile).  (10 points)
+#name this function minDaysCaseDeath(caseFile, populationFile).
 
 def minDaysCaseDeath(caseFile, populationFile):
     f = open(populationFile,"r")
@@ -298,7 +298,7 @@ def minDaysCaseDeath(caseFile, populationFile):
 #data, a state, a date and an event type.  if the event is 'cases' your function should
 #return the number of cases reported on that date, and if the event is 'deaths' your
 #function should return the number of deaths on that date.  Name this function
-#eventsOnDate(fileName, state, date, event).  (5 points)
+#eventsOnDate(fileName, state, date, event).
 
 def eventsOnDate(fileName, state, date, event):
 
@@ -348,6 +348,10 @@ def eventsOnDate(fileName, state, date, event):
 
 
 
+
+
+
+
 #####################        casesBetweenDates       #############################
 #write a function that takes, as an argument, the name of a file that contains case/death data,
 #a state, a start date, an end date, and an event type,  if the event is 'cases', your
@@ -357,7 +361,7 @@ def eventsOnDate(fileName, state, date, event):
 #that you created previously. Even if you are unable to write that function, you should
 #assume that the function exists and that you can use it.  
 #Name this function casesBetweenDates(fileName, state, start, end, event).
-#(5 points)
+
 
 def casesBetweenDates(fileName, state, start,event):
 
@@ -376,7 +380,7 @@ def casesBetweenDates(fileName, state, start,event):
 #event is 'cases' your function should return the highest number of cases reported for that
 #state, and if the event is 'deaths' your function should return the highest number of deaths
 #reported for that state.  Name this function totalEventsRecorded(fileName, state, event).
-#(5 points)
+
 
 def totalEventsRecorded(fileName, state, event):
     f = open(fileName, "r")
@@ -425,7 +429,7 @@ def totalEventsRecorded(fileName, state, event):
 #function should return the string 'Washington: 45'  there should be one space between the colon
 #and the number of events.  You must use the helper function totalEventsRecorded(fileName, state, event)
 #in this function. Name this function mostEvents(caseFile, populationFile, event).
-#(5 points)
+
 
 def mostEvents(caseFile, populationFile, event):
     f = open(populationFile, "r")
@@ -450,7 +454,6 @@ def mostEvents(caseFile, populationFile, event):
 #and returns total number of events in the US.  Name this function 
 #totalUSEvents(caseFile, populationFile, event).  You must use the helper function 
 #totalEventsRecorded(caseFile, myState, event) in this function.
-#(5 points)
 
 def totalUSEvents(caseFile, populationFile, event):
     f = open(populationFile, "r")
@@ -618,30 +621,59 @@ def writeToFile(event):
             caseFile.write("\n")
         else:
             # population
-            populationStat = "Population: " + str(population)
+            populationStat = "1. Population: " + str(population)
 
             # Opening date
-            openingStateDate = "The date this state started opening business as usual: " + str(beginningDate)
+            openingStateDate = "2. The date this state started opening business as usual: " + str(beginningDate)
 
             # Date that is 2 weeks after opening date
-            twoWeeksStat = "Two weeks after opening date: " + str(twoWeeksAfter)
+            twoWeeksStat = "3. Two weeks after opening date: " + str(twoWeeksAfter)
+
+            # Track daily changes
+            previousDay = previousDate()
+            previousDay = str(previousDay)
+            previousEvents = eventsOnDate("us-states.csv", stateFinal,previousDay,event)
+
+            # cases on last day
+            lastDayEvents = eventsOnDate("us-states.csv",stateFinal,endDate,event)
+
+            # Changes between last day and previous day
+            dailyChange = int(lastDayEvents) - int(previousEvents)
 
             # Date of first event
-            firstEvent = "The first of " + str(event) + " occurred: " + str(
+            firstEvent = "4. The first of " + str(event) + " occurred: " + str(
                 getFirstEvent("us-states.csv", stateFinal, event))
             # How many cases in between since opening date and last compiled date
-            casesInBetween = "The new cases between opening date: " + str(beginningDate) + " and compiled date: " + str(endDate) + " are: " + str(
+            casesInBetween = "5. The new cases between opening date: " + str(beginningDate) + " and compiled date: " + str(endDate) + " are: " + str(
                 casesBetweenDates("us-states.csv", stateFinal, startDate, event))
             # Number of total cases
-            totalCases ="Total " + str(event) + ": " + str(totalEventsRecorded("us-states.csv",stateFinal,event))
+            totalCases ="6. Total " + str(event) + ": " + str(totalEventsRecorded("us-states.csv",stateFinal,event))
             # Cases per capita
-            casesPerCapita = "The " + str(event) + " per capita: " + str(eventsPerCapita("us-states.csv",stateFinal,population,event))
+            casesPerCapita = "7. The " + str(event) + " per capita: " + str(eventsPerCapita("us-states.csv",stateFinal,population,event))
+
+            # lastTracked day
+            lastDayTracked = "8. Last date that with data: " + str(endDate)
+            dayChange = "9. The change in cases between  " +str(previousDay)+ " and " + str(endDate) + ": " + "+"+str(dailyChange)
+
+
+            maximumInDailyChange = 0
+
+            if dailyChange > maximumInDailyChange:
+                maximumInDailyChange = dailyChange
+                happenedIn = "10. The highest spike in numbers happened between " + str(endDate) + " and " + str(previousDay) + " with +" + str(dailyChange) + " in new " + str(event)
+            else:
+                happenedIn = "10. No major change"
+
+
+
             # Write stats to file
             caseFile.write(statsFor)
             caseFile.write("\n")
             caseFile.write(populationStat)
             caseFile.write("\n")
             caseFile.write(firstEvent)
+            caseFile.write("\n")
+            caseFile.write(lastDayTracked)
             caseFile.write("\n")
             caseFile.write(openingStateDate)
             caseFile.write("\n")
@@ -653,12 +685,11 @@ def writeToFile(event):
             caseFile.write("\n")
             caseFile.write(casesPerCapita)
             caseFile.write("\n")
+            caseFile.write(happenedIn)
+            caseFile.write("\n")
             caseFile.write("\n")
 
-
-
-    return endDate
+    return previousEvents
     f.close()
 
-
-writeToFile("cases")
+print(writeToFile("cases"))
