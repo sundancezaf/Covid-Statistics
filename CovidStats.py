@@ -578,7 +578,7 @@ def writeToFile(event):
     # open the file containing the accumulated data
     f = open("statesOpening.csv","r")
     # open the file we will write to
-    caseFile = open("CovidStatistics.txt", "w")
+    caseFile = open("CovidStatistics.txt", "a")
     for line in f:
         # Here we get the name of the state and the date businesses are openin
         splitValue = line.split(",")
