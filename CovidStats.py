@@ -101,10 +101,6 @@ def previousDate():
     dateBefore = lastDate - timedelta(days=1)
     return dateBefore
 
-print(previousDate())
-
-
-
 
 #####################                 isInRange               #########################
 #write a function that takes, as an argument, three strings representing dates
@@ -345,11 +341,6 @@ def eventsOnDate(fileName, state, date, event):
 
     f.close()
     return finalStat
-
-
-
-
-
 
 
 #####################        casesBetweenDates       #############################
@@ -692,4 +683,4 @@ def writeToFile(event):
     return previousEvents
     f.close()
 
-print(writeToFile("cases"))
+writeToFile("cases")
